@@ -1,0 +1,4 @@
+handlers:
+
+- url: /blob_upload(/.*)?
+  script: blob_utils.views.app

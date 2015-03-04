@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>歡迎光臨zouber自製書籤網站</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <link href="/media/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <style type="text/css">
+      input[type="text"]{
+        width: 320px;
+      }
+      textarea{
+        width: 320px;
+      }
+      .pure-button-primary a{
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+      }
+    </style>
+    <script type="text/javascript" src="/media/js/jquery-ui/external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/media/js/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+    </script>
+  </head>
+  <body style="margin-left: 0px; margin-top: 0px">
+    <h1 style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px">歡迎光臨zouber自製書籤網站</h1>
+    <div id="body">
+      <div id="tabs-6">
+        <form id="management" class="pure-form pure-form-aligned" method="post" action="/add_bookmark" enctype="multipart/form-data">
+          <fieldset>
+            <div class="pure-control-group">
+                <label for="title">輸入標題：</label>
+                <input type="text" name="title"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="url">輸入網址：</label>
+                <input type="text" name="url" />
+            </div>
+            <div class="pure-control-group">
+                <label for="tags">輸入標籤(以逗號 ',' 分隔)：</label>
+                <input type="text" name="tags" />
+            </div>
+            <div class="pure-control-group">
+                <label for="desc">輸入描述：</label>
+                <textarea name="desc" rows="4"></textarea>
+            </div>
+            
+            <div class="pure-control-group">
+                <label for="image_files">選擇上傳圖檔(限圖片檔, 可選多張, 總檔案大小勿超過20MB)：</label>
+                <input type="file" name="image_files" multiple>
+            </div>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">送出</button>
+            </div>
+          </fieldset>
+        </form>
+
+        <table id="bookmark_table" class="pure-table">
+          <thead>
+            <tr>
+              <th>編輯<br/>刪除</th>
+              <th>網址</th>
+              <th>標題</th>
+              <th>描述</th>
+              <th>標籤</th>
+              <th>圖片</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in bookmarks %}
+            {% if loop.index%2 == 0 %}
+            <tr style="font-size: 12pt" class="product_item">
+            {% else %}
+            <tr class="pure-table-odd product_item" style="font-size: 12pt">
+            {% endif %}
+              <td>
+                <div id="{{item.key.id()}}_edit" key="{{item.key.id()}}" name="{{item._get_kind()}}" class="edit_item pure-button-primary pure-button">
+                  <a href="/edit_item?class_name={{item._get_kind()}}&key_id={{item.key.id()}}">編輯</a>
+                </div>
+                <div id="{{item.key.id()}}_remove" key="{{item.key.id()}}" name="{{item._get_kind()}}" class="remove_item pure-button-primary pure-button" style="background-color: red; margin-top: 10px">刪除</div>
+              </td>
+              <td><a href="{{item.url}}" target="_blank">{{item.url}}</a></td>
+              <td>{{item.title}}</td>
+              <td>
+                {% autoescape false %}{{item.desc}}{% endautoescape %}
+              </td>
+              <td>
+                {% for tag in item.tags %}
+                  {{tag}},
+                {% endfor %}
+              </td>
+              <td>
+                {% for url in item.thumb_urls %}
+                <img src="{{url}}" />
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+  </body>
+</html>
+{% endautoescape %}

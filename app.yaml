@@ -22,6 +22,9 @@ handlers:
 builtins:
 - remote_api: on
 
+includes:
+- blob_utils/include.yaml
+
 libraries:
 - name: webapp2
   version: latest
