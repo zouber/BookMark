@@ -1,0 +1,29 @@
+application: zouber-bookmark
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /favicon\.ico
+  static_files: media/img/favicon.ico
+  upload: media/img/favicon.ico 
+
+- url: /media
+  static_dir: media
+
+- url: /remoteapi.*
+  script: google.appengine.ext.remote_api.handler.application
+  login: admin
+
+- url: /.*
+  script: urls.app
+
+builtins:
+- remote_api: on
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: "2.6"
